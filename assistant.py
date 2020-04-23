@@ -1,4 +1,3 @@
-import os
 import wolframalpha
 import speech_recognition as sr
 import sys
