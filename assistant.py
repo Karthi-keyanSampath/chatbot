@@ -110,7 +110,7 @@ if __name__ == '__main__':
             
             try:
                 try:
-                    client = wolframalpha.Client('JKT223-QK73WYJ6JL')
+                    client = wolframalpha.Client('app_client_ID')
                     res = client.query(query)
                     results = next(res.results).text
                     speak('here the information')
