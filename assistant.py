@@ -1,10 +1,13 @@
 import wolframalpha
+import random
 import speech_recognition as sr
 import sys
 import webbrowser
-import random
+import datetime
 import pyttsx3
 import wikipedia
+import smtplib
+import pyjokes
 
 engine = pyttsx3.init('sapi5')
 
@@ -16,15 +19,38 @@ def speak(audio):
     engine.say(audio)
     engine.runAndWait()
 
+def greetMe():
+    currentH = int(datetime.datetime.now().hour)
+    if currentH >= 0 and currentH < 12:
+        speak('Good Morning!')
+
+    if currentH >= 12 and currentH < 18:
+        speak('Good Afternoon!')
+
+    if currentH >= 18 and currentH !=0:
+        speak('Good Evening!')
+
+greetMe()
+
 greet = ['what can I do for you?', 'how can i help you?', 'how can I assist you?']
 speak('hey boss ' + random.choice(greet))
 
-def myCommand():
+
+opinion1=input("enter your choice \n1.typing \n2.speech \nopinion: ")
     
-    r = sr.Recognizer()                                                                                   
-    with sr.Microphone() as source:                                                                       
-        print("Listening...")
-        audio = r.listen(source)
+
+def myCommand():
+    if opinion1=="1" or opinion1=="typing":
+        query = str(input('MAX : '))  
+        return query
+        
+    else :
+
+        r = sr.Recognizer()                                                                                   
+        with sr.Microphone() as source:
+            print("Listening...")
+            r.pause_threshold =  1
+            audio = r.listen(source)
         
     try:
         query = r.recognize_google(audio, language='en-in')
@@ -33,9 +59,8 @@ def myCommand():
     except sr.UnknownValueError:
         speak('Sorry BOSS! I didn\'t get that! Try typing the command!')
         query = str(input('MAX : '))
-
     return query
-        
+    
 if __name__ == '__main__':
 
     while True:
@@ -65,10 +90,11 @@ if __name__ == '__main__':
         elif 'tell me something' in query:
              th = ['www.nasa.gov/news', 'www.nationalgeographic.com/latest-stories/', 'www.cnet.com/news/', 'www.isro.gov.in','www.researchgate.net']
              webbrowser.open (random.choice(th))
+             
         elif "what\'s your boss name" in query or "name of your creator" in query:
             stMsgs = ['karthikeyan']
             speak(random.choice(stMsgs))
-            
+        
         elif 'open twitter' in query:
             speak('okay opening twitter')
             webbrowser.open("www.twitter.com")
@@ -88,6 +114,9 @@ if __name__ == '__main__':
         elif 'bye' in query or 'bye MAX' in query:
             speak('Bye boss, have a good day.')
             sys.exit()
+            
+        elif 'joke' in query:
+            speak(pyjokes.get_joke())
                                     
         elif 'open map' in query:
             speak('okay opening map')
@@ -103,6 +132,14 @@ if __name__ == '__main__':
         elif 'open news' in query or 'show news' in query or 'show current affairs' in query:
             speak('opening news')
             webbrowser.open("news")
+            
+        elif 'open whatsapp' in query:
+            speak('opening whatsapp web')
+            webbrowser.open("https://web.whatsapp.com/")
+            
+        elif 'open fb' in query or 'open facebook' in query:
+            speak('opening fb')
+            webbrowser.open("https://www.facebook.com/")
 
         else:
             query = query
@@ -110,7 +147,7 @@ if __name__ == '__main__':
             
             try:
                 try:
-                    client = wolframalpha.Client('app_client_ID')
+                    client = wolframalpha.Client('client_id')
                     res = client.query(query)
                     results = next(res.results).text
                     speak('here the information')
@@ -122,7 +159,6 @@ if __name__ == '__main__':
                     speak(results)
         
             except:
-                webbrowser.open("query")
+                webbrowser.open(query)
         
         speak('Next Command! boss!')
-        
